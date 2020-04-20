@@ -1,15 +1,17 @@
 source https://www.nuget.org/api/v2
 
 nuget FAKE
-
 nuget FSharp.Management
 nuget NUnit ~> 2
 nuget NUnit.Runners ~> 2
 nuget FluentAssertions
 
 //IKVM dependencies - the nuget and tool versions need to be in sync.
-nuget IKVM 8.1.5717
-http http://www.frijters.net/ikvmbin-8.1.5717.0.zip
+http https://github.com/ahaenggli/ikvm/releases/download/v8.5.0.3-draft/IKVM.REVIVED.8.5.0.3.nupkg
+http https://github.com/ahaenggli/ikvm/releases/download/v8.5.0.3-draft/ikvm_v8.5.0.3.zip
+
+source ./paket-files
+nuget IKVM.REVIVED 8.5.0.3
 
 //Tika release Jar URL
-http http://www-us.apache.org/dist/tika/tika-app-1.17.jar
+http https://downloads.apache.org/tika/tika-app-1.24.jar

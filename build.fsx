@@ -30,7 +30,7 @@ let release =
 
 // --------------------------------------------------------------------------------------
 // IKVM.NET compilation helpers
-let ikvmc = root.``paket-files``.``www.frijters.net``.``ikvm-8.1.5717.0``.bin.``ikvmc.exe``
+let ikvmc = root.``paket-files``.``github.com``.``ikvmc.exe``
 
 type IKVMcTask(jar:string, assembly:string) =
   member val JarFile = jar
@@ -107,10 +107,10 @@ Target "RunTests" (fun _ ->
             OutputFile = artifactDir + "\TestResults.xml"})
 )
 
-type tikaDir = root.``paket-files``.``www-us.apache.org``
+type tikaDir = root.``paket-files``.``downloads.apache.org``
 
 Target "CompileTikaLib" (fun _ ->
-    !! "paket-files/www-us.apache.org/tika-app-*.jar"
+    !! "paket-files/downloads.apache.org/tika-app-*.jar"
     |> Seq.map (fun name -> IKVMcTask(name, "TikaOnDotNet", Version=release.AssemblyVersion))
     |> IKVMCompile tikaLibDir
 )
