@@ -648,5 +648,5 @@ HTTP
   remote: https://github.com
     IKVM.REVIVED.8.5.0.3.nupkg (/ahaenggli/ikvm/releases/download/v8.5.0.3-draft/IKVM.REVIVED.8.5.0.3.nupkg)
     ikvm_v8.5.0.3.zip (/ahaenggli/ikvm/releases/download/v8.5.0.3-draft/ikvm_v8.5.0.3.zip)
-  remote: https://downloads.apache.org
-    tika-app-1.24.jar (/tika/tika-app-1.24.jar)
+  remote: https://archive.apache.org
+    tika-app-1.23.jar (/dist/tika/tika-app-1.23.jar)

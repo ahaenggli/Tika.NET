@@ -14,4 +14,4 @@ source ./paket-files
 nuget IKVM.REVIVED 8.5.0.3
 
 //Tika release Jar URL
-http https://downloads.apache.org/tika/tika-app-1.24.jar
+http https://archive.apache.org/dist/tika/tika-app-1.23.jar

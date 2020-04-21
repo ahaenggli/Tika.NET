@@ -1,3 +1,7 @@
+## 1.23
+
+- Tika updated to 1.23. Please see the official Tika site for [what's changed](http://tika.apache.org/1.23/).
+
 ## 1.17.1
 
 - Add new overloads to the `TextExtractor.Extract` allowing users to provide their own extraction result assemblers. Example:

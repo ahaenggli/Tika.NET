@@ -4,6 +4,7 @@
 
 open Microsoft.FSharp.Core.Printf
 open Fake
+open Fake.Core
 open Fake.AssemblyInfoFile
 open Fake.Git
 open Fake.ReleaseNotesHelper
@@ -11,7 +12,28 @@ open System
 open System.IO
 open FSharp.Management
 
-MSBuildDefaults <- { MSBuildDefaults with Verbosity = Some MSBuildVerbosity.Minimal }
+open Fake.DotNet
+open Fake.IO.Globbing.Operators
+open Fake.IO
+open Fake.IO.FileSystemOperators
+open Fake.Tools
+
+Environment.setEnvironVar "VisualStudioVersion" "15.0"
+let buildMode = Environment.environVarOrDefault "buildMode" "Release"
+
+let setParams (defaults:MSBuildParams ) =
+        { defaults with
+            Verbosity = Some(Quiet)
+            Targets = ["Clean;Rebuild"]
+            Properties =
+                [
+                    "Optimize", "True"
+                    "DebugSymbols", "True"
+                    "Configuration", buildMode
+                    "Platform", "Any CPU"
+                ]
+         }
+//MSBuildDefaults <- { MSBuildDefaults with Verbosity = Some MSBuildVerbosity.Minimal }
 
 let artifactDir = "artifacts"
 let tempDir = "temp"
@@ -95,9 +117,12 @@ Target "Build" (fun _ ->
             then ["SignAssembly","true"; "AssemblyOriginatorKeyFile",keyFile.FullName]
             else []
 
-    !! solutionFile
-    |> MSBuildReleaseExt "" strongName "Clean;Rebuild"
-    |> ignore
+    Fake.DotNet.MSBuild.build setParams solutionFile
+    |> DoNothing
+
+    //!! solutionFile
+    //|> MSBuildReleaseExt "" strongName "Clean;Rebuild"
+    //|> ignore
 )
 
 Target "RunTests" (fun _ ->
@@ -107,10 +132,10 @@ Target "RunTests" (fun _ ->
             OutputFile = artifactDir + "\TestResults.xml"})
 )
 
-type tikaDir = root.``paket-files``.``downloads.apache.org``
+type tikaDir = root.``paket-files``.``archive.apache.org``
 
 Target "CompileTikaLib" (fun _ ->
-    !! "paket-files/downloads.apache.org/tika-app-*.jar"
+    !! "paket-files/archive.apache.org/tika-app-*.jar"
     |> Seq.map (fun name -> IKVMcTask(name, "TikaOnDotNet", Version=release.AssemblyVersion))
     |> IKVMCompile tikaLibDir
 )
@@ -142,6 +167,13 @@ Target "BuildSNK" (fun _ ->
     System.IO.File.WriteAllBytes(keyFile.FullName, snkbytes)
     )
     | None -> trace "No key found in the \"snk\" environment"
+)
+
+Target "RunTestsOnly" (fun _ ->
+    !! testAssemblies
+    |> NUnit (fun p ->
+        { p with
+            OutputFile = artifactDir + "\TestResults.xml"})
 )
 
 "Clean"

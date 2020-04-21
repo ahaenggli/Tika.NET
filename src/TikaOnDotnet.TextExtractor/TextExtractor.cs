@@ -66,7 +66,14 @@ namespace TikaOnDotNet.TextExtraction
             InputStream UrlStreamFactory(Metadata metadata)
             {
                 metadata.add("Uri", uri.ToString());
-                var pageBytes = new WebClient().DownloadData(uri);
+
+
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                // ignore any certificate validation errors
+                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
+                var pageBytes = new WebClient().DownloadData(uri.ToString());
 
                 return TikaInputStream.get(pageBytes, metadata);
             }

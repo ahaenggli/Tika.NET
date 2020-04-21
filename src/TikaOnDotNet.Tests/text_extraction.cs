@@ -105,8 +105,7 @@ namespace TikaOnDotNet.Tests
             var textExtractionResult = _cut.Extract("files/apache.jpg");
 
             textExtractionResult.Text.Trim().Should().BeEmpty();
-
-            textExtractionResult.Metadata["Software"].Should().Contain("Paint.NET");
+            textExtractionResult.Metadata["tiff:Software"].Should().Contain("Paint.NET");
         }
 
         [Test]
@@ -205,9 +204,9 @@ namespace TikaOnDotNet.Tests
         public void should_extract_uri_contents()
         {
             const string url = "https://en.wikipedia.org/wiki/Apache_Tika";
-
-            var textExtractionResult = _cut.Extract(new Uri(url));
-
+            var u = new Uri(url);
+            var textExtractionResult = _cut.Extract(u);
+            
             textExtractionResult.Text.Should().Contain("Apache Tika is a content detection and analysis framework");
             textExtractionResult.Metadata["Uri"].Should().Be(url);
         }
